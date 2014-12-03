@@ -21,25 +21,34 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, 800, 800)];
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 200, 800, 250)];
     scrollView.userInteractionEnabled = true;
     scrollView.scrollEnabled = YES;
     scrollView.pagingEnabled = NO;
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.showsHorizontalScrollIndicator = NO;
-    scrollView.contentSize = CGSizeMake(200*8, 0);
+    scrollView.contentSize = CGSizeMake(200*7, 0);
     scrollView.delegate = self;
     [self.view addSubview:scrollView];
+    startOffset = 0;
+//    scrollView.translatesAutoresizingMaskIntoConstraints = YES;
+    
     
     
     cards = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < 5; i++) {
 //        CALayer *card = [self createCard:<#(CGPoint)#>]
-        UIView *card = [[UIView alloc] initWithFrame:CGRectMake(165*i, 200, 160, 200)];
+        UIView *card = [[UIView alloc] initWithFrame:CGRectMake(165*i, 0, 160, 200)];
         
         float xPOS = card.frame.origin.x - scrollView.contentOffset.x - self.view.frame.size.width/2 + card.frame.size.width/2;
-        card.frame = CGRectMake(card.frame.origin.x, 200 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
+        card.frame = CGRectMake(card.frame.origin.x, 0 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
+        
+//        double rads = DEGREES_TO_RADIANS(30);
+//        CGAffineTransform transform = CGAffineTransformRotate(CGAffineTransformIdentity, rads);
+//        card.transform = transform;
+        
+//        card.translatesAutoresizingMaskIntoConstraints = NO;
         
         [card.layer addSublayer:[self createCard:card.window.frame.origin]];
         
@@ -50,6 +59,7 @@
     }
     
 }
+
 
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollViewLol
@@ -69,14 +79,21 @@
 //        NSLog(@"%f", xPOS);
         
        // double rads = DEGREES_TO_RADIANS(90);
-        card.frame = CGRectMake(card.frame.origin.x, 200 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
+        card.frame = CGRectMake(card.frame.origin.x, 0 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
     
-        double rads = DEGREES_TO_RADIANS(scrollView.contentOffset.x - startOffset);
-        CGAffineTransform transform = CGAffineTransformRotate(CGAffineTransformIdentity, rads);
-        card.transform = transform;
+//        double rads = DEGREES_TO_RADIANS(scrollView.contentOffset.x - startOffset);
+//        CGAffineTransform transform = CGAffineTransformRotate(CGAffineTransformIdentity, rads);
+//        card.transform = transform;
+        
+//        CGAffineTransform transform = CGAffineTransformRotate(CGAffineTransformIdentity, rads);
+//        [CATransaction begin];
+//        [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+//        card.transform = transform;
+//        [CATransaction commit];
         
     }
     startOffset = scrollView.contentOffset.x;
+    
     
 }
 
