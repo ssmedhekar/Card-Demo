@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CardScrollView.h"
+//#import "CardScrollView.h"
 
 
 @interface ViewController ()
@@ -27,7 +27,7 @@
     //CGRectInset takes a frame and an amount to shrink it by (for both the X and Y), returns a new frame
     //self.view.layer.frame = CGRectInset(self.view.layer.frame, 20, 20);
     
-    CardScrollView* scrollView = [[CardScrollView alloc] initWithFrame:CGRectMake(0, 40, self.view.bounds.size.width, 250)];
+//    CardScrollView* scrollView = [[CardScrollView alloc] initWithFrame:CGRectMake(0, 40, self.view.bounds.size.width, 250)];
     
     //PLACED INTO CardScrollView.m
 //    scrollView.backgroundColor = [UIColor redColor];
@@ -37,10 +37,10 @@
 //    scrollView.showsHorizontalScrollIndicator = NO;
 //    scrollView.contentSize = CGSizeMake(self.view.bounds.size.width * 2, 250);
     
-    [scrollView viewDidLoad];
-    [self.view addSubview:scrollView];
-    [scrollView setDelegate:scrollView];
-    scrollView.tag = 1;
+//    [scrollView viewDidLoad];
+//    [self.view addSubview:scrollView];
+//    [scrollView setDelegate:scrollView];
+//    scrollView.tag = 1;
 }
 
 - (void)didReceiveMemoryWarning {

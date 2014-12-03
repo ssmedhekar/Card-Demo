@@ -11,6 +11,12 @@
 
 @interface HandViewController ()
 
+@property CGPoint mTouchPoint;
+@property NSInteger mFingerCount;
+@property UIView *temp;
+@property CGRect originalFrame;
+@property int originalZ;
+
 @end
 
 @implementation HandViewController
@@ -18,10 +24,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    self.temp = nil;
     self.view.backgroundColor = [UIColor whiteColor];
     
-    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 200, 800, 250)];
+    
+    
+    
+    scrollView = [[cardScroll alloc] initWithFrame:CGRectMake(0, 200, 890, 600)];
     scrollView.userInteractionEnabled = true;
     scrollView.scrollEnabled = YES;
     scrollView.pagingEnabled = NO;
@@ -29,17 +38,30 @@
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.contentSize = CGSizeMake(200*7, 0);
     scrollView.delegate = self;
+    scrollView.userInteractionEnabled = YES;
     [self.view addSubview:scrollView];
+    [scrollView setDelegate:self];
+    
     startOffset = 0;
 //    scrollView.translatesAutoresizingMaskIntoConstraints = YES;
+    
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 420, 800, 600)];
+    view.backgroundColor =[UIColor redColor];
+    view.alpha = .5;
+    [self.view addSubview:view];
+    
+    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 800, 200)];
+    topView.backgroundColor =[UIColor redColor];
+    topView.alpha = .5;
+    [self.view addSubview:topView];
     
     
     
     cards = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < 5; i++) {
-//        CALayer *card = [self createCard:<#(CGPoint)#>]
-        UIView *card = [[UIView alloc] initWithFrame:CGRectMake(165*i, 0, 160, 200)];
+        UIView *card = [[UIView alloc] initWithFrame:CGRectMake(165*i, 400, 160, 200)];
         
         float xPOS = card.frame.origin.x - scrollView.contentOffset.x - self.view.frame.size.width/2 + card.frame.size.width/2;
         card.frame = CGRectMake(card.frame.origin.x, 0 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
@@ -58,7 +80,154 @@
         [cards addObject:card];
     }
     
+//    UISwipeGestureRecognizer *singleTap = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeGestureCaptured:)];
+//    [scrollView addGestureRecognizer:singleTap];
+    
+//    UISwipeGestureRecognizer *recognizer;
+//    recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeFrom:)];
+//    [recognizer setDirection:(UISwipeGestureRecognizerDirectionUp)];
+//    [scrollView addGestureRecognizer:recognizer];
+//    [recognizer setDelegate:self];
+//    //recognizer.cancelsTouchesInView = NO;
+//    
 }
+
+- (void) gestureRecognizer:(UIGestureRecognizer *)gr movedWithTouches:(NSSet*)touches andEvent:(UIEvent *)event{
+    
+
+    UITouch * touch = [touches anyObject];
+    self.mTouchPoint = [touch locationInView:self.view];
+    self.mFingerCount = [touches count];
+    
+}
+
+-(void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer {
+    
+    NSLog(@"Swipe received.");
+    NSUInteger index = [recognizer  numberOfTouches];
+    NSLog(@"%lu", (unsigned long)index);
+    for (NSUInteger i = 0; i < index; i++) {
+        CGPoint touchPoint = [recognizer locationOfTouch:i inView:scrollView];
+        NSLog(@"%f", touchPoint.x);
+    }
+    
+    switch (recognizer.state) {
+        case UIGestureRecognizerStateBegan:
+        case UIGestureRecognizerStateChanged:
+        {
+            CGPoint location = [recognizer locationInView: scrollView];
+            
+            NSLog(@"Point: %f", location.y);
+            
+            break;
+        }
+            
+        case UIGestureRecognizerStateEnded:
+        {
+            NSLog(@"Ended");
+            
+            break;
+        }
+            
+        default:
+            break;
+    }
+    
+    
+    
+    //CGPoint touchPoint=[recognizer locationInView:scrollView];
+    
+}
+
+- (void)swipeGestureCaptured:(UITapGestureRecognizer *)gesture
+{
+    CGPoint touchPoint=[gesture locationInView:scrollView];
+    NSLog(@"%f", touchPoint.x);
+}
+
+
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+ //   for (UITouch *touch in touches) {
+        //CGPoint touchedPoint = [touch locationInView:self.view];
+//        if (touchedPoint.x > 160)
+//        {
+//            scrollView.userInteractionEnabled = YES;
+//        }
+//        else
+//        {
+//            scrollView.userInteractionEnabled = NO;
+//        }
+//    }
+}
+
+-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    for (UITouch *touch in touches) {
+//        CGPoint touchedPoint = [touch locationInView:self.view];
+//        NSLog(@"%f", touchedPoint.x);
+//        NSLog(@"hello");
+        
+//        if (touchedPoint.x > 160)
+//        {
+//            scrollView.userInteractionEnabled = YES;
+//        }
+//        else
+//        {
+//            scrollView.userInteractionEnabled = NO;
+//        }
+        
+        CGPoint location = [touch locationInView:scrollView];
+        CGPoint prevLocation = [touch previousLocationInView:scrollView];
+        if (location.y - prevLocation.y < 0) {
+            scrollView.scrollEnabled = NO;
+        }
+        
+        if(scrollView.scrollEnabled == NO) {
+            if (self.temp == nil) {
+                
+                for (UIView *card in cards) {
+                    
+                   // temp = [card hitTest:location withEvent:event];
+                    if (CGRectContainsPoint(card.frame, location)) {
+                        self.temp = card;
+                        self.originalFrame = self.temp.frame;
+                        self.originalZ = self.temp.layer.zPosition;
+                        self.temp.layer.zPosition = 100;
+                    }
+                    
+                }
+            }
+            if (self.temp) {
+                CGFloat cardHeight = 200;
+                CGFloat cardWidth = 160;
+                [CATransaction begin];
+                [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
+                self.temp.frame = CGRectMake(location.x - cardWidth/2, location.y - cardHeight/2, 160, 200);
+                [CATransaction commit];
+            }
+        }
+        
+    }
+}
+
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    scrollView.scrollEnabled = YES;
+    
+    
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:0.1];
+    //[UIView setAnimationDelay:1.0];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    self.temp.frame = self.originalFrame;
+    [UIView commitAnimations];
+    self.temp.layer.zPosition = self.originalZ;
+    self.temp = nil;
+}
+
+
 
 
 
@@ -96,6 +265,8 @@
     
     
 }
+
+
 
 
 - (CALayer *)createCard:(CGPoint)point {
@@ -141,33 +312,6 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    startOffset = scrollView.contentOffset.x;
-}
-
--(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"hello");
-    UITouch *lastTouch = nil;
-    for (UITouch *touch in touches) {
-        if (lastTouch != nil) {
-            CGPoint touchedPoint = [touch locationInView:self.view];
-            CGPoint lastTouchedPoint = [lastTouch locationInView:self.view];
-            CGFloat change = touchedPoint.x - lastTouchedPoint.x;
-            
-            for (UIView *card in cards)
-            {
-                double rads = DEGREES_TO_RADIANS(change);
-                CGAffineTransform transform = CGAffineTransformRotate(CGAffineTransformIdentity, rads);
-                card.transform = transform;
-                NSLog(@"hello");
-            }
-        }
-        
-        lastTouch = touch;
-        NSLog(@"bye");
-        
-    }
-}
 
 /*
 #pragma mark - Navigation

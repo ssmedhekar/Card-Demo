@@ -7,12 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "cardScroll.h"
 
-@interface HandViewController : UIViewController <UIScrollViewDelegate>
+@interface HandViewController : UIViewController <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 {
-    UIScrollView *scrollView;
+    cardScroll *scrollView;
     NSMutableArray *cards;
     CGFloat startOffset;
+    CALayer *touchedLayer;
 }
+
+-(void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer;
 
 @end
