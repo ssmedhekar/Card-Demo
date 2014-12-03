@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "CardScrollView.h"
 
 
 @interface ViewController ()
@@ -25,6 +26,21 @@
     //self.view.layer.cornerRadius = 20.0;
     //CGRectInset takes a frame and an amount to shrink it by (for both the X and Y), returns a new frame
     //self.view.layer.frame = CGRectInset(self.view.layer.frame, 20, 20);
+    
+    CardScrollView* scrollView = [[CardScrollView alloc] initWithFrame:CGRectMake(0, 40, self.view.bounds.size.width, 250)];
+    
+    //PLACED INTO CardScrollView.m
+//    scrollView.backgroundColor = [UIColor redColor];
+//    scrollView.scrollEnabled = YES;
+//    scrollView.pagingEnabled = NO;
+//    scrollView.showsVerticalScrollIndicator = NO;
+//    scrollView.showsHorizontalScrollIndicator = NO;
+//    scrollView.contentSize = CGSizeMake(self.view.bounds.size.width * 2, 250);
+    
+    [scrollView viewDidLoad];
+    [self.view addSubview:scrollView];
+    [scrollView setDelegate:scrollView];
+    scrollView.tag = 1;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -34,6 +50,8 @@
 }
 
 - (void)createCard:(CGPoint)point {
+    
+    //CARD DESIGN
     CALayer *cardLayer = [CALayer layer];
     cardLayer.backgroundColor = [UIColor whiteColor].CGColor;
     cardLayer.shadowOffset = CGSizeMake(0, 3);
@@ -43,14 +61,25 @@
     CGFloat cardHeight = 200;
     CGFloat cardWidth = 160;
     cardLayer.frame = CGRectMake(point.x - cardWidth/2, point.y - cardHeight/2, cardWidth, cardHeight);
-    [self.view.layer addSublayer:cardLayer];
     
+    //PLACE INTO NORMAL VIEW
+    // [self.view.layer addSublayer:cardLayer];
+    
+    //PLACE INTO SCROLL VIEW:
+    UIScrollView *scrollView = (UIScrollView*)[self.view viewWithTag:1];
+    cardLayer.frame = CGRectMake(point.x - cardWidth/2 + scrollView.contentOffset.x, 20, cardWidth, cardHeight);
+    [scrollView.layer addSublayer:cardLayer];
+    
+    
+    //ADD IMAGE TO CARD
     CALayer *imageLayer = [CALayer layer];
     imageLayer.frame = CGRectMake(cardLayer.bounds.size.width*.05, cardLayer.bounds.size.width*.05, cardLayer.bounds.size.width*.9, cardLayer.bounds.size.width*.9);
     imageLayer.contents = (id) [UIImage imageNamed:@"RishiCropped.jpg"].CGImage;
     imageLayer.masksToBounds = YES;
     [cardLayer addSublayer:imageLayer];
     
+    
+    //ADD TEXT TO CARD
     CATextLayer *label = [CATextLayer layer];
     [label setFont:@"PermanentMarker"];
     [label setFontSize:14];
@@ -72,6 +101,7 @@
         CGPoint touchedPoint = [touch locationInView:self.view];
         touchedPoint = [[touch view] convertPoint:touchedPoint toView:nil];
         CALayer *layer;
+        
         for (CALayer *subLayer in self.view.layer.sublayers) {
             CALayer *temp;
             temp = [subLayer hitTest:touchedPoint];

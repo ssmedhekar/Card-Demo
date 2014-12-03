@@ -10,6 +10,8 @@
 		F400DB5C1A2DBF9600740BDC /* Friends.png in Resources */ = {isa = PBXBuildFile; fileRef = F400DB5B1A2DBF9600740BDC /* Friends.png */; };
 		F400DB5E1A2E1ABA00740BDC /* RishiCropped.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F400DB5D1A2E1ABA00740BDC /* RishiCropped.jpg */; };
 		F400DB601A2E25C700740BDC /* PermanentMarker.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F400DB5F1A2E252D00740BDC /* PermanentMarker.ttf */; };
+		F41E919F1A2E5815007807CE /* CardScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = F41E919E1A2E5815007807CE /* CardScrollView.m */; };
+		F41E91A21A2E7872007807CE /* HandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F41E91A11A2E7872007807CE /* HandViewController.m */; };
 		F49BFB391A2DA4D90005B6DC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F49BFB381A2DA4D90005B6DC /* main.m */; };
 		F49BFB3C1A2DA4D90005B6DC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F49BFB3B1A2DA4D90005B6DC /* AppDelegate.m */; };
 		F49BFB3F1A2DA4D90005B6DC /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F49BFB3E1A2DA4D90005B6DC /* ViewController.m */; };
@@ -33,6 +35,10 @@
 		F400DB5B1A2DBF9600740BDC /* Friends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Friends.png; sourceTree = "<group>"; };
 		F400DB5D1A2E1ABA00740BDC /* RishiCropped.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = RishiCropped.jpg; sourceTree = "<group>"; };
 		F400DB5F1A2E252D00740BDC /* PermanentMarker.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = PermanentMarker.ttf; sourceTree = "<group>"; };
+		F41E919D1A2E5815007807CE /* CardScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardScrollView.h; sourceTree = "<group>"; };
+		F41E919E1A2E5815007807CE /* CardScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardScrollView.m; sourceTree = "<group>"; };
+		F41E91A01A2E7872007807CE /* HandViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandViewController.h; sourceTree = "<group>"; };
+		F41E91A11A2E7872007807CE /* HandViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HandViewController.m; sourceTree = "<group>"; };
 		F49BFB331A2DA4D90005B6DC /* CardsDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CardsDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F49BFB371A2DA4D90005B6DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F49BFB381A2DA4D90005B6DC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -91,7 +97,11 @@
 				F49BFB3B1A2DA4D90005B6DC /* AppDelegate.m */,
 				F49BFB3D1A2DA4D90005B6DC /* ViewController.h */,
 				F49BFB3E1A2DA4D90005B6DC /* ViewController.m */,
+				F41E91A01A2E7872007807CE /* HandViewController.h */,
+				F41E91A11A2E7872007807CE /* HandViewController.m */,
 				F49BFB401A2DA4D90005B6DC /* Main.storyboard */,
+				F41E919D1A2E5815007807CE /* CardScrollView.h */,
+				F41E919E1A2E5815007807CE /* CardScrollView.m */,
 				F49BFB431A2DA4D90005B6DC /* Images.xcassets */,
 				F49BFB451A2DA4D90005B6DC /* LaunchScreen.xib */,
 				F400DB5B1A2DBF9600740BDC /* Friends.png */,
@@ -233,7 +243,9 @@
 			files = (
 				F49BFB3F1A2DA4D90005B6DC /* ViewController.m in Sources */,
 				F49BFB3C1A2DA4D90005B6DC /* AppDelegate.m in Sources */,
+				F41E91A21A2E7872007807CE /* HandViewController.m in Sources */,
 				F49BFB391A2DA4D90005B6DC /* main.m in Sources */,
+				F41E919F1A2E5815007807CE /* CardScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
