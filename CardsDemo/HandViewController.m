@@ -16,6 +16,9 @@
 @property UIView *temp;
 @property CGRect originalFrame;
 @property int originalZ;
+@property float xTouchOffset;
+@property float yTouchOffset;
+
 
 @end
 
@@ -30,7 +33,7 @@
     
     
     
-    scrollView = [[cardScroll alloc] initWithFrame:CGRectMake(0, 200, 890, 600)];
+    scrollView = [[cardScroll alloc] initWithFrame:CGRectMake(0, 0, 890, 600)];
     scrollView.userInteractionEnabled = true;
     scrollView.scrollEnabled = YES;
     scrollView.pagingEnabled = NO;
@@ -61,10 +64,10 @@
     cards = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < 5; i++) {
-        UIView *card = [[UIView alloc] initWithFrame:CGRectMake(165*i, 400, 160, 200)];
+        UIView *card = [[UIView alloc] initWithFrame:CGRectMake(165*i, 200, 160, 200)];
         
         float xPOS = card.frame.origin.x - scrollView.contentOffset.x - self.view.frame.size.width/2 + card.frame.size.width/2;
-        card.frame = CGRectMake(card.frame.origin.x, 0 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
+        card.frame = CGRectMake(card.frame.origin.x, 200 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
         
 //        double rads = DEGREES_TO_RADIANS(30);
 //        CGAffineTransform transform = CGAffineTransformRotate(CGAffineTransformIdentity, rads);
@@ -195,6 +198,8 @@
                         self.originalFrame = self.temp.frame;
                         self.originalZ = self.temp.layer.zPosition;
                         self.temp.layer.zPosition = 100;
+                        self.yTouchOffset = self.temp.frame.origin.y - location.y;
+                        self.xTouchOffset = self.temp.frame.origin.x - location.x;
                     }
                     
                 }
@@ -204,7 +209,7 @@
                 CGFloat cardWidth = 160;
                 [CATransaction begin];
                 [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
-                self.temp.frame = CGRectMake(location.x - cardWidth/2, location.y - cardHeight/2, 160, 200);
+                self.temp.frame = CGRectMake(location.x + self.xTouchOffset, location.y +self.yTouchOffset, 160, 200);
                 [CATransaction commit];
             }
         }
@@ -248,7 +253,7 @@
 //        NSLog(@"%f", xPOS);
         
        // double rads = DEGREES_TO_RADIANS(90);
-        card.frame = CGRectMake(card.frame.origin.x, 0 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
+        card.frame = CGRectMake(card.frame.origin.x, 200 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
     
 //        double rads = DEGREES_TO_RADIANS(scrollView.contentOffset.x - startOffset);
 //        CGAffineTransform transform = CGAffineTransformRotate(CGAffineTransformIdentity, rads);
