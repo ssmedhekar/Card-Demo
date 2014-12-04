@@ -211,8 +211,8 @@
                 }
             }
             if (self.temp) {
-                CGFloat cardHeight = 200;
-                CGFloat cardWidth = 160;
+               // CGFloat cardHeight = 200;
+               // CGFloat cardWidth = 160;
                 [CATransaction begin];
                 [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
                 self.temp.frame = CGRectMake(location.x + self.xTouchOffset, location.y +self.yTouchOffset, 160, 200);
