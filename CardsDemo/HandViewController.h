@@ -15,6 +15,7 @@
     NSMutableArray *cards;
     CGFloat startOffset;
     CALayer *touchedLayer;
+    float angles[5];
 }
 
 -(void)handleSwipeFrom:(UISwipeGestureRecognizer *)recognizer;

@@ -19,6 +19,8 @@
 @property float xTouchOffset;
 @property float yTouchOffset;
 @property UIView *selectView;
+//@property NSMutableArray *angles;
+
 
 
 @end
@@ -55,7 +57,7 @@
     view.alpha = .5;
     [self.view addSubview:view];
     
-    self.selectView = [[UIView alloc] initWithFrame:CGRectMake(10, 20, 170, 210)];
+    self.selectView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 190, 230)];
     self.selectView.backgroundColor =[UIColor blueColor];
     self.selectView.alpha = 0.5;
     [self.view addSubview:self.selectView];
@@ -70,6 +72,7 @@
     cards = [[NSMutableArray alloc] init];
     
     for (int i = 0; i < 5; i++) {
+        angles[i] = 0;
         UIView *card = [[UIView alloc] initWithFrame:CGRectMake(165*i, 200, 160, 200)];
         
         float xPOS = card.frame.origin.x - scrollView.contentOffset.x - self.view.frame.size.width/2 + card.frame.size.width/2;
@@ -200,6 +203,7 @@
                     
                    // temp = [card hitTest:location withEvent:event];
                     if (CGRectContainsPoint(card.frame, location)) {
+                        NSLog(@"Picked Up Card!");
                         self.temp = card;
                         self.originalFrame = self.temp.frame;
                         self.originalZ = self.temp.layer.zPosition;
@@ -211,6 +215,7 @@
                 }
             }
             if (self.temp) {
+                //NSLog(@"Moving Card!");
                // CGFloat cardHeight = 200;
                // CGFloat cardWidth = 160;
                 [CATransaction begin];
@@ -229,20 +234,31 @@
     
     
     
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.1];
-    //[UIView setAnimationDelay:1.0];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    if (CGRectContainsRect(self.selectView.frame, self.temp.frame)) {
+   
+    CGRect testFrame = self.temp.frame;
+    testFrame.origin.x -= scrollView.contentOffset.x;
+    if (CGRectContainsRect(self.selectView.frame, testFrame)) {
         NSLog(@"Contained!");
+        [UIView setAnimationDuration:0];
+        self.temp.frame = testFrame;
         [self.view addSubview:self.temp];
         [cards removeObject:self.temp];
 
     }
-    else
+    else {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.1];
+        //[UIView setAnimationDelay:1.0];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+        NSLog(@"Not Contained!");
+        NSLog(@"%f and %f should be within %f and %f", self.temp.frame.origin.x, self.temp.frame.origin.x + self.temp.frame.size.width, self.selectView.frame.origin.x,self.selectView.frame.origin.x + self.selectView.frame.size.width);
+        NSLog(@"%f and %f should be within %f and %f", self.temp.frame.origin.y, self.temp.frame.origin.y + self.temp.frame.size.height, self.selectView.frame.origin.y,self.selectView.frame.origin.y + self.selectView.frame.size.height);
         self.temp.frame = self.originalFrame;
-    [UIView commitAnimations];
-    self.temp.layer.zPosition = self.originalZ;
+        self.temp.layer.zPosition = self.originalZ;
+        [UIView commitAnimations];
+    }
+    
+    
     self.temp = nil;
     
 }
@@ -259,7 +275,7 @@
     
 //    UIView *card = [cards firstObject];
 //    NSLog(@"%f", -1 * (card.frame.origin.x + scrollViewLol.contentOffset.x));
-    
+    int i = 0;
     for (UIView *card in cards)
     {
 //        NSLog(@"LOLZ");
@@ -268,9 +284,14 @@
 //        NSLog(@"%f", xPOS);
         
        // double rads = DEGREES_TO_RADIANS(90);
+//        card.layer.anchorPoint = CGPointMake(card.frame.origin.x + card.frame.size.width/2, card.frame.origin.y + card.frame.size.height/2);
         card.frame = CGRectMake(card.frame.origin.x, 200 + fabs(0.05 * xPOS), card.frame.size.width, card.frame.size.height);
-    
-//        double rads = DEGREES_TO_RADIANS(scrollView.contentOffset.x - startOffset);
+        float xRot = xPOS / self.view.frame.size.width;
+        xRot = xRot*50;
+        if (xPOS == 0)
+            NSLog(@"Angle: %f", xRot);
+        xRot = xRot - angles[i];
+//        double rads = DEGREES_TO_RADIANS(xRot);
 //        CGAffineTransform transform = CGAffineTransformRotate(CGAffineTransformIdentity, rads);
 //        card.transform = transform;
         
