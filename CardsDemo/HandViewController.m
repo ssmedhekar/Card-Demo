@@ -18,6 +18,7 @@
 @property int originalZ;
 @property float xTouchOffset;
 @property float yTouchOffset;
+@property UIView *selectView;
 
 
 @end
@@ -53,6 +54,11 @@
     view.backgroundColor =[UIColor redColor];
     view.alpha = .5;
     [self.view addSubview:view];
+    
+    self.selectView = [[UIView alloc] initWithFrame:CGRectMake(10, 20, 170, 210)];
+    self.selectView.backgroundColor =[UIColor blueColor];
+    self.selectView.alpha = 0.5;
+    [self.view addSubview:self.selectView];
     
     UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 800, 200)];
     topView.backgroundColor =[UIColor redColor];
@@ -222,14 +228,23 @@
     scrollView.scrollEnabled = YES;
     
     
+    
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.1];
     //[UIView setAnimationDelay:1.0];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
-    self.temp.frame = self.originalFrame;
+    if (CGRectContainsRect(self.selectView.frame, self.temp.frame)) {
+        NSLog(@"Contained!");
+        [self.view addSubview:self.temp];
+        [cards removeObject:self.temp];
+
+    }
+    else
+        self.temp.frame = self.originalFrame;
     [UIView commitAnimations];
     self.temp.layer.zPosition = self.originalZ;
     self.temp = nil;
+    
 }
 
 
